@@ -1,9 +1,11 @@
-# Coder テンプレート
+# Coder テンプレート（個人の開発環境）
 
-task の開発用ワークスペース（Docker）。Coder のホストで Docker が動いていれば使える。
+yupix が普段の開発に使うワークスペース（Docker）。koyori-app/task と koyori-app/ui を開発できる環境に、
+Tailscale・T3 Code・Paradev・ai-skill などの個人の道具を足してある。koyori を開発できる最低限の環境は
+koyori-app/task の `coder/` にある。Coder のホストで Docker が動いていれば使える。
 
 ```bash
-coder templates push task -d task
+coder templates push dev -d dev
 ```
 
 ## 入っているもの
@@ -12,7 +14,8 @@ coder templates push task -d task
 |---|---|
 | イメージ（`build/Dockerfile`） | Rust（rustfmt / clippy）、cargo-nextest、cargo-hakari、mold、Node、pnpm（corepack）、ripgrep、gh、jq、psql、Docker（compose / buildx）、Tailscale、Python 3 と uv、Noto CJK フォント、Playwright の Chromium が要る OS のライブラリ |
 | ホーム（初回起動時に `main.tf` の `startup_script` が入れる） | Claude Code、Codex、Cursor CLI（`cursor-agent`）、T3 Code（`t3`）、Paradev（`superset` / `paradev`） |
-| ホーム（`git-clone` モジュールが入れる） | リポジトリ（`~/works/task`）。既にあれば何もしない |
+| ホーム（`git-clone` モジュールが入れる） | リポジトリ（`~/works/task`・`~/works/ui`）。既にあれば何もしない |
+| ホーム（`startup_script` が毎回の起動で入れる） | ai-skill（`~/ai-skill`）を clone して `install.sh` を実行する。Claude Code・Codex の共通の指示とスキルがリンクされる |
 
 ホーム（`/home/coder`）と Docker のデータはボリュームに残り、ワークスペースを止めても消えない。
 それ以外はイメージを作り直すと元に戻る。

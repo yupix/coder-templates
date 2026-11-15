@@ -62,6 +62,13 @@ resource "coder_agent" "main" {
     setsid nohup t3 serve --no-browser --lan >/tmp/t3-serve.log 2>&1 < /dev/null &
     cd ~
 
+    # Claude Code / Codex の共通設定とスキル（Mac と同じもの）。clone は Coder の SSH 鍵が GitHub に登録済みであることが前提
+    if [ -d ~/ai-skill ] || git clone -q git@github.com:yupix/ai-skill.git ~/ai-skill; then
+      ~/ai-skill/install.sh || echo "ai-skill の install.sh が失敗した"
+    else
+      echo "ai-skill を clone できなかった"
+    fi
+
     # Paradev はホストの id を /etc/machine-id から作る。コンテナのものは起動ごとに変わる（空）ので、
     # ホームに 1 度だけ作った値を置き直し、id が変わらないようにする
     [ -s ~/.local/share/machine-id ] || tr -d - < /proc/sys/kernel/random/uuid > ~/.local/share/machine-id
@@ -109,11 +116,11 @@ resource "coder_agent" "main" {
 # See https://registry.coder.com/modules/coder/git-clone
 # Coder の SSH 鍵（coder gitssh）で認証する。鍵が GitHub に未登録なら失敗する
 module "git-clone" {
-  count    = data.coder_workspace.me.start_count
+  for_each = data.coder_workspace.me.start_count > 0 ? toset(["koyori-app/task", "koyori-app/ui"]) : toset([])
   source   = "registry.coder.com/coder/git-clone/coder"
   version  = "2.0.5"
   agent_id = coder_agent.main.id
-  url      = "git@github.com:koyori-app/task.git"
+  url      = "git@github.com:${each.value}.git"
   base_dir = "~/works"
 }
 

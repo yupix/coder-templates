@@ -1,4 +1,4 @@
-# task の開発用 Coder ワークスペースのイメージ。
+# 個人の開発用 Coder ワークスペースのイメージ。koyori-app/task と koyori-app/ui を開発できるものに、普段使う道具を足してある。
 #
 # /home/coder はワークスペースごとのボリュームで覆われるので、ここで入れるものは
 # /home/coder の外に置く。自己更新するツール（Claude Code / Codex / Cursor CLI / T3 Code / Paradev）は
