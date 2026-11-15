@@ -70,6 +70,22 @@ RUN apt-get update \
         fonts-freefont-ttf \
     && rm -rf /var/lib/apt/lists/*
 
+# CodexBar の CLI（Claude と Codex の使用率とリセットの時刻を問い合わせる。ai-skill の orch の usage.sh が使う）。
+# 実行ファイルは隣の CodexBar_CodexBarCore.bundle を読むので、展開した場所ごと置いてリンクする
+ARG CODEXBAR_VERSION=0.84.0
+ARG CODEXBAR_SHA256_X86_64=d0ea804c567e3b5855823da2ed3a8c98dd422ab958a9684a3d77d1c9cf25dcd1
+ARG CODEXBAR_SHA256_AARCH64=fbacb436af95ce16bea45dd9b393e9df8e47f0abefa5dc236df5b2b01532d079
+RUN arch="$(uname -m)" \
+    && case "$arch" in x86_64) sum="$CODEXBAR_SHA256_X86_64" ;; aarch64) sum="$CODEXBAR_SHA256_AARCH64" ;; *) exit 1 ;; esac \
+    && asset="CodexBarCLI-v${CODEXBAR_VERSION}-linux-musl-${arch}.tar.gz" \
+    && curl -fsSL -o "/tmp/$asset" "https://github.com/steipete/CodexBar/releases/download/v${CODEXBAR_VERSION}/$asset" \
+    && echo "$sum  /tmp/$asset" | sha256sum -c - \
+    && mkdir -p /opt/codexbar \
+    && tar -xzf "/tmp/$asset" -C /opt/codexbar \
+    && ln -s /opt/codexbar/CodexBarCLI /usr/local/bin/codexbar \
+    && rm "/tmp/$asset" \
+    && codexbar --version
+
 USER coder
 WORKDIR /home/coder
 
