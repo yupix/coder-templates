@@ -55,6 +55,8 @@ resource "coder_agent" "main" {
     # nightly は API から版を探し、Linux 用の配布物がある
     command -v t3 >/dev/null || curl -fsSL https://t3.codes/install.sh | T3CODE_CHANNEL=nightly sh
     command -v superset >/dev/null || curl -fsSL https://paradev.com/cli/install.sh | sh
+    # rtk（コマンドの出力を縮める CLI プロキシ）。~/.local/bin に入る。Claude Code のフックは下の ai-skill の install.sh が足す
+    [ -x ~/.local/bin/rtk ] || curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh || echo "rtk を入れられなかった"
 
     # T3 Code のサーバー（3773）。--lan で tailnet からも届く（守りはペアリングコードだけ）。
     # ペアリング情報はログか `t3 pair` で見る。systemd が無いので `t3 service install` は使えない
