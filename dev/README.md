@@ -13,7 +13,7 @@ coder templates push dev -d dev
 | 場所 | 中身 |
 |---|---|
 | イメージ（`build/Dockerfile`） | Rust（rustfmt / clippy）、cargo-nextest、cargo-hakari、mold、Node、pnpm（corepack）、ripgrep、gh、jq、psql、Docker（compose / buildx）、Tailscale、Python 3 と uv、Noto CJK フォント、Playwright の Chromium が要る OS のライブラリ、CodexBar の CLI（`codexbar`。Claude と Codex の使用率） |
-| ホーム（初回起動時に `main.tf` の `startup_script` が入れる） | Claude Code、Codex、Cursor CLI（`cursor-agent`）、T3 Code（`t3`）、Paradev（`superset` / `paradev`）、rtk |
+| ホーム（初回起動時に `main.tf` の `startup_script` が入れる） | Claude Code、Codex、Cursor CLI（`cursor-agent`）、T3 Code（`t3`）、Paradev（`superset` / `paradev`）、pi（`pi`）、rtk |
 | ホーム（`git-clone` モジュールが入れる） | リポジトリ（`~/works/task`・`~/works/ui`）。既にあれば何もしない |
 | ホーム（`startup_script` が毎回の起動で入れる） | ai-skill（`~/ai-skill`）を clone して `install.sh` を実行する。Claude Code・Codex の共通の指示とスキルがリンクされ、Claude Code の Bash を rtk 経由に書き換えるフックが無ければ足される |
 

@@ -55,6 +55,8 @@ resource "coder_agent" "main" {
     # nightly は API から版を探し、Linux 用の配布物がある
     command -v t3 >/dev/null || curl -fsSL https://t3.codes/install.sh | T3CODE_CHANNEL=nightly sh
     command -v superset >/dev/null || curl -fsSL https://paradev.com/cli/install.sh | sh
+    # pi（pi coding agent）。~/.pi/agent/install に入り、コマンドは ~/.local/bin に置かれる。端末が無いと確認なしで入る。更新は `pi update`
+    command -v pi >/dev/null || curl -fsSL https://pi.dev/install.sh | sh || echo "pi を入れられなかった"
     # rtk（コマンドの出力を縮める CLI プロキシ）。~/.local/bin に入る。Claude Code のフックは下の ai-skill の install.sh が足す
     [ -x ~/.local/bin/rtk ] || curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh || echo "rtk を入れられなかった"
 
