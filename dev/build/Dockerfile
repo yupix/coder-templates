@@ -86,6 +86,20 @@ RUN arch="$(uname -m)" \
     && rm "/tmp/$asset" \
     && codexbar --version
 
+# forgejo-cli（`fj`。Forgejo の PR・issue・リリースなどを CLI で扱う）。配布元はチェックサムを出していないので、
+# 取り込んだ時点の SHA-256 を固定する。libssl3 と zlib を使う（どちらも上で入っている）
+ARG FORGEJO_CLI_VERSION=0.7.0
+ARG FORGEJO_CLI_SHA256_X86_64=6803c12eed17bfadb40ba95da2a6ab58f9b4a7dc10eabfe3512fce7e2fe6216f
+ARG FORGEJO_CLI_SHA256_AARCH64=198987908e194704b4a350119596547bc95cd9b6518024d6d02c26f061cfce83
+RUN arch="$(uname -m)" \
+    && case "$arch" in x86_64) sum="$FORGEJO_CLI_SHA256_X86_64" ;; aarch64) sum="$FORGEJO_CLI_SHA256_AARCH64" ;; *) exit 1 ;; esac \
+    && asset="forgejo-cli-${arch}-linux.tar.gz" \
+    && curl -fsSL -o "/tmp/$asset" "https://codeberg.org/forgejo-contrib/forgejo-cli/releases/download/v${FORGEJO_CLI_VERSION}/$asset" \
+    && echo "$sum  /tmp/$asset" | sha256sum -c - \
+    && tar -xzf "/tmp/$asset" -C /usr/local/bin fj \
+    && rm "/tmp/$asset" \
+    && fj version
+
 USER coder
 WORKDIR /home/coder
 
