@@ -12,7 +12,7 @@ coder templates push dev -d dev
 
 | 場所 | 中身 |
 |---|---|
-| イメージ（`build/Dockerfile`） | Rust（rustfmt / clippy）、cargo-nextest、cargo-hakari、mold、Node、pnpm（corepack）、ripgrep、gh、jq、psql、Docker（compose / buildx）、Tailscale、Python 3 と uv、Noto CJK フォント、Playwright の Chromium が要る OS のライブラリ、CodexBar の CLI（`codexbar`。Claude と Codex の使用率） |
+| イメージ（`build/Dockerfile`） | Rust（rustfmt / clippy）、cargo-nextest、cargo-hakari、mold、Node、pnpm（corepack）、ripgrep、gh、jq、psql、Docker（compose / buildx）、Tailscale、Python 3 と uv、Noto CJK フォント、Playwright の Chromium が要る OS のライブラリ、CodexBar の CLI（`codexbar`。Claude と Codex の使用率）、forgejo-cli（`fj`。Forgejo の PR・issue など） |
 | ホーム（初回起動時に `main.tf` の `startup_script` が入れる） | Claude Code、Codex、Cursor CLI（`cursor-agent`）、T3 Code（`t3`）、Paradev（`superset` / `paradev`）、pi（`pi`）、rtk |
 | ホーム（`git-clone` モジュールが入れる） | リポジトリ（`~/works/task`・`~/works/ui`）。既にあれば何もしない |
 | ホーム（`startup_script` が毎回の起動で入れる） | ai-skill（`~/ai-skill`）を clone して `install.sh` を実行する。Claude Code・Codex の共通の指示とスキルがリンクされ、Claude Code の Bash を rtk 経由に書き換えるフックが無ければ足される |
@@ -38,7 +38,8 @@ Rust と Node の版は `build/Dockerfile` の `ARG` で決めている。`rust-
    ```bash
    echo -n "<tskey-auth-…>" | coder secret create tailscale-key --env TS_AUTHKEY
    ```
-5. コミットに署名するなら GPG 鍵を取り込む
+5. Forgejo を CLI で操作するなら、Forgejo で発行したアクセストークンを `fj -H code.koyori.app auth add-token` に標準入力で渡す（`auth login` はブラウザを開くのでワークスペースでは使いにくい。ログイン情報はホームに残る）
+6. コミットに署名するなら GPG 鍵を取り込む
 
 ## 注意
 
