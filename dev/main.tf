@@ -57,6 +57,8 @@ resource "coder_agent" "main" {
     command -v superset >/dev/null || curl -fsSL https://paradev.com/cli/install.sh | sh
     # pi（pi coding agent）。~/.pi/agent/install に入り、コマンドは ~/.local/bin に置かれる。端末が無いと確認なしで入る。更新は `pi update`
     command -v pi >/dev/null || curl -fsSL https://pi.dev/install.sh | sh || echo "pi を入れられなかった"
+    # Antigravity CLI（`agy`）。~/.local/bin に入り、裏で自分を更新する。スクリプトは bash が要る
+    [ -x ~/.local/bin/agy ] || curl -fsSL https://antigravity.google/cli/install.sh | bash || echo "Antigravity CLI を入れられなかった"
     # rtk（コマンドの出力を縮める CLI プロキシ）。~/.local/bin に入る。Claude Code のフックは下の ai-skill の install.sh が足す
     [ -x ~/.local/bin/rtk ] || curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh || echo "rtk を入れられなかった"
 
